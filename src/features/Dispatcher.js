@@ -1,18 +1,21 @@
 const commands = require('./Commands')
 const undefinedDevs = require('../lib/UndefinedDevs')
 const logger = require('../utils/Logger')
+const { getGuildMemberByMessage, getChannelById, getChannelByName } = require('../utils/Discord')
 
 class Dispatcher {
   constructor(client) {
     this.client = client
+    this.undefinedBotsChannelId = '752574250610851860'
+    this.generalBotsChannelId = '752566045461577739'
   }
 
   welcome(member) {
     try {
-      const channel = member.guild.channels.cache.find(ch => ch.name === '🖖-welcome')
+      const channel = getChannelByName(member, '🖖-welcome')
       if (!channel) return
       const emoji = this.client.emojis.cache.get('724816411733786808')
-      const rulesChannel = member.guild.channels.cache.find(ch => ch.name === '🦧-reglas').toString()
+      const rulesChannel = getChannelByName(member, '🦧-reglas').toString()
       channel.send(`¡Hola ${member}! Bienvenvid@ a la comunidad de Undefined Devs ${emoji}\nLee nuestro canal de ${rulesChannel} para comenzar a participar en la comunidad.`)
     } catch (error) {
       logger('welcome method', error)
@@ -30,10 +33,9 @@ class Dispatcher {
 
   removeUnverified(reaction, user) {
     try {
-      const serverGuilds = this.client.guilds.cache.get(reaction.message.guild.id)
-      const member = serverGuilds.members.cache.find(g => g.id === user.id)
-      
+      const member = reaction.message.guild.member(user)
       if (member) {
+        console.log('remove unverified')
         let role = member.guild.roles.cache.find(r => r.name === 'unverified')
         member.roles.remove(role)
       }
@@ -44,9 +46,8 @@ class Dispatcher {
 
   hijole(message) {
     try {
-      const channel = message.guild.channels.cache.find(ch => ch.id === '752566045461577739')
-      const user = message.author
-      const member = message.guild.member(user)
+      const channel = getChannelById(message, this.generalBotsChannelId)
+      const member = getGuildMemberByMessage(message)
       channel.send(`${member}`, { files: ['https://i.pinimg.com/564x/e8/17/80/e8178017c48860752523cc080af84d57.jpg'] })
     } catch (error) {
       logger('hijole method', error)
@@ -59,7 +60,7 @@ class Dispatcher {
       if (user) {
         const member = message.guild.member(user)
         if (member) {
-          const channel = member.guild.channels.cache.find(ch => ch.name === '☝🏼-moderación')
+          const channel = getChannelByName(member, '☝🏼-moderación')
           const emoji = this.client.emojis.cache.get('752160268913475605')
           const rulesChannel = message.guild.channels.cache.get('724806034769575988').toString()
           channel.send(`${emoji} ${member} tu comportamiento no está siendo el adecuado, te recomendamos leer las reglas de nuevo ${rulesChannel}`)
@@ -76,7 +77,9 @@ class Dispatcher {
       commands.forEach(c => {
         result += `${c.id} --> ${c.description}\n`
       })
-      message.reply(`Lista de comandos\n${result}`)
+      const channel = getChannelById(message, this.undefinedBotsChannelId)
+      const member = getGuildMemberByMessage(message)
+      channel.send(`${member} Lista de comandos\n${result}`)
     } catch (error) {
       logger('help command', error)
     }
@@ -96,7 +99,11 @@ class Dispatcher {
 
       result += `\nDiscord: <https://discord.gg/UKPbV3j>\n\nLive anterior: [insertar link del live]`
 
-      message.reply(result)
+      const channel = getChannelById(message, this.undefinedBotsChannelId)
+      const member = getGuildMemberByMessage(message)
+
+      channel.send(`${member} Lista de comandos\n${result}`)
+
     } catch (error) {
       logger('description command', error)
     }
@@ -104,12 +111,13 @@ class Dispatcher {
 
   love(message) {
     try {
-      const channel = message.guild.channels.cache.find(ch => ch.id === '752566045461577739')
+      const channel = getChannelById(message, this.generalBotsChannelId)
       channel.send(`Buenos días, buenas tardes, buenas noches, recuerden que los queremos mucho`, { files: ['https://i.imgur.com/QrBXmAC.jpg'] })
     } catch (error) {
       logger('love command', error)
     }
   }
+
 }
 
 module.exports = Dispatcher
