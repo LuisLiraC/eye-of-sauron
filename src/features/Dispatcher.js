@@ -44,7 +44,10 @@ class Dispatcher {
 
   hijole(message) {
     try {
-      message.reply('', { files: ['https://i.pinimg.com/564x/e8/17/80/e8178017c48860752523cc080af84d57.jpg'] })
+      const channel = message.guild.channels.cache.find(ch => ch.id === '752566045461577739')
+      const user = message.author
+      const member = message.guild.member(user)
+      channel.send(`${member}`, { files: ['https://i.pinimg.com/564x/e8/17/80/e8178017c48860752523cc080af84d57.jpg'] })
     } catch (error) {
       logger('hijole method', error)
     }
@@ -101,8 +104,8 @@ class Dispatcher {
 
   love(message) {
     try {
-      const channel = message.guild.channels.cache.find(ch => ch.name === '🏢-general')
-      channel.send(`@everyone Buenos días, buenas tardes, buenas noches, recuerden que los queremos mucho`, { files: ['https://i.imgur.com/QrBXmAC.jpg'] })
+      const channel = message.guild.channels.cache.find(ch => ch.id === '752566045461577739')
+      channel.send(`Buenos días, buenas tardes, buenas noches, recuerden que los queremos mucho`, { files: ['https://i.imgur.com/QrBXmAC.jpg'] })
     } catch (error) {
       logger('love command', error)
     }
