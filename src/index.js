@@ -1,5 +1,5 @@
 const Discord = require('discord.js')
-const client = new Discord.Client()
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] })
 const config = require('./config')
 const Dispatcher = require('./features/Dispatcher')
 const Validator = require('./utils/Validator')
@@ -10,6 +10,7 @@ const dispatcher = new Dispatcher(client)
 
 client.on('guildMemberAdd', member => {
   dispatcher.welcome(member)
+  dispatcher.setUnverified(member)
 })
 
 client.on('message', message => {
@@ -29,4 +30,8 @@ client.on('message', message => {
   } else if (!validator.isUndefinedDev(id) && message.content.startsWith('!')) {
     dispatcher.hijole(message)
   }
+})
+
+client.on('messageReactionAdd', (reaction, user) => {
+  dispatcher.removeUnverified(reaction, user)
 })

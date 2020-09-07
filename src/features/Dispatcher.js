@@ -1,5 +1,6 @@
 const commands = require('./Commands')
 const undefinedDevs = require('../lib/UndefinedDevs')
+const logger = require('../utils/Logger')
 
 class Dispatcher {
   constructor(client) {
@@ -11,9 +12,33 @@ class Dispatcher {
       const channel = member.guild.channels.cache.find(ch => ch.name === '🖖-welcome')
       if (!channel) return
       const emoji = this.client.emojis.cache.get('724816411733786808')
-      channel.send(`¡Hola ${member}! Bienvenvid@ a la comunidad de Undefined Devs ${emoji}`)
+      const rulesChannel = member.guild.channels.cache.find(ch => ch.name === '🦧-reglas').toString()
+      channel.send(`¡Hola ${member}! Bienvenvid@ a la comunidad de Undefined Devs ${emoji}\nLee nuestro canal de ${rulesChannel} para comenzar a participar en la comunidad.`)
     } catch (error) {
-      console.log(`[error] [welcome command] ${error}`)
+      logger('welcome method', error)
+    }
+  }
+
+  setUnverified(member) {
+    try {
+      let role = member.guild.roles.cache.find(r => r.name === 'unverified')
+      member.roles.add(role)
+    } catch (error) {
+      logger('set unverified method', error)
+    }
+  }
+
+  removeUnverified(reaction, user) {
+    try {
+      const serverGuilds = this.client.guilds.cache.get(reaction.message.guild.id)
+      const member = serverGuilds.members.cache.find(g => g.id === user.id)
+      
+      if (member) {
+        let role = member.guild.roles.cache.find(r => r.name === 'unverified')
+        member.roles.remove(role)
+      }
+    } catch (error) {
+      logger('remove unverified method', error)
     }
   }
 
@@ -21,7 +46,7 @@ class Dispatcher {
     try {
       message.reply('', { files: ['https://i.pinimg.com/564x/e8/17/80/e8178017c48860752523cc080af84d57.jpg'] })
     } catch (error) {
-      console.log(`[error] [hijole command] ${error}`)
+      logger('hijole method', error)
     }
   }
 
@@ -38,7 +63,7 @@ class Dispatcher {
         }
       }
     } catch (error) {
-      console.log(`[error] [rules command] ${error}`)
+      logger('rules command', error)
     }
   }
 
@@ -50,7 +75,7 @@ class Dispatcher {
       })
       message.reply(`Lista de comandos\n${result}`)
     } catch (error) {
-      console.log(`[error] [help command] ${error}`)
+      logger('help command', error)
     }
   }
 
@@ -70,7 +95,7 @@ class Dispatcher {
 
       message.reply(result)
     } catch (error) {
-      console.log(`[error] [description command] ${error}`)
+      logger('description command', error)
     }
   }
 
@@ -79,7 +104,7 @@ class Dispatcher {
       const channel = message.guild.channels.cache.find(ch => ch.name === '🏢-general')
       channel.send(`@everyone Buenos días, buenas tardes, buenas noches, recuerden que los queremos mucho`, { files: ['https://i.imgur.com/QrBXmAC.jpg'] })
     } catch (error) {
-      console.log(`[error] [love command] ${error}`)
+      logger('love command', error)
     }
   }
 }
