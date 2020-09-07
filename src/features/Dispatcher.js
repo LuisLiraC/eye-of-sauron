@@ -91,7 +91,7 @@ class Dispatcher {
         }
       })
 
-      result += `\nDiscord: <https://discord.gg/XFywjFJ>\n\nLive anterior: [insertar link del live]`
+      result += `\nDiscord: <https://discord.gg/UKPbV3j>\n\nLive anterior: [insertar link del live]`
 
       message.reply(result)
     } catch (error) {
