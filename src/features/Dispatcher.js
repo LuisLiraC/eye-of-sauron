@@ -7,40 +7,52 @@ class Dispatcher {
   }
 
   rules(message) {
-    const user = message.mentions.users.first()
-    if (user) {
-      const member = message.guild.member(user)
-      if (member) {
-        const channel = member.guild.channels.cache.find(ch => ch.name === '☝🏼-moderación')
-        const emoji = this.client.emojis.cache.get('752160268913475605')
-        const rulesChannel = message.guild.channels.cache.get('724806034769575988').toString()
-        channel.send(`${emoji} ${member} tu comportamiento no está siendo el adecuado, te recomendamos leer las reglas de nuevo ${rulesChannel}`)
+    try {
+      const user = message.mentions.users.first()
+      if (user) {
+        const member = message.guild.member(user)
+        if (member) {
+          const channel = member.guild.channels.cache.find(ch => ch.name === '☝🏼-moderación')
+          const emoji = this.client.emojis.cache.get('752160268913475605')
+          const rulesChannel = message.guild.channels.cache.get('724806034769575988').toString()
+          channel.send(`${emoji} ${member} tu comportamiento no está siendo el adecuado, te recomendamos leer las reglas de nuevo ${rulesChannel}`)
+        }
       }
+    } catch (error) {
+      console.log(`[error] [rules command] ${error}`)
     }
   }
 
   help(message) {
-    let result = ''
-    commands.forEach(c => {
-      result += `${c.id} --> ${c.description}\n`
-    })
-    message.reply(`Lista de comandos\n${result}`)
+    try {
+      let result = ''
+      commands.forEach(c => {
+        result += `${c.id} --> ${c.description}\n`
+      })
+      message.reply(`Lista de comandos\n${result}`)
+    } catch (error) {
+      console.log(`[error] [help command] ${error}`)
+    }
   }
 
   description(message) {
-    const participants = message.mentions.users.array()
-    let result = `Descripción:\nEn este #UndefinedLive estaremos hablando sobre [insertar descripción del tema]\n\nSi te gustan estos lives no olvides compartir y seguirnos en nuestras redes 😁👇🏼\n\nParticipantes:\n`
-
-    participants.forEach(p => {
-      const ud = undefinedDevs.find(u => u.id === p.id)
-      if (ud) {
-        result += `👉 ${ud.name}:\n<${ud.youtube}>\n<${ud.twitter}>\n`
-      }
-    })
-
-    result += `\nDiscord: <https://discord.gg/XFywjFJ>\n\nLive anterior: [insertar link del live]`
-
-    message.reply(result)
+    try {
+      const participants = message.mentions.users.array()
+      let result = `Descripción:\nEn este #UndefinedLive estaremos hablando sobre [insertar descripción del tema]\n\nSi te gustan estos lives no olvides compartir y seguirnos en nuestras redes 😁👇🏼\n\nParticipantes:\n`
+  
+      participants.forEach(p => {
+        const ud = undefinedDevs.find(u => u.id === p.id)
+        if (ud) {
+          result += `👉 ${ud.name}:\n<${ud.youtube}>\n<${ud.twitter}>\n`
+        }
+      })
+  
+      result += `\nDiscord: <https://discord.gg/XFywjFJ>\n\nLive anterior: [insertar link del live]`
+  
+      message.reply(result)
+    } catch (error) {
+      console.log(`[error] [description command] ${error}`)
+    }
   }
 }
 
