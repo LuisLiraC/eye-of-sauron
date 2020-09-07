@@ -88,7 +88,7 @@ class Dispatcher {
   description(message) {
     try {
       const participants = message.mentions.users.array()
-      let result = `Descripción:\nEn este #UndefinedLive estaremos hablando sobre [insertar descripción del tema]\n\nSi te gustan estos lives no olvides compartir y seguirnos en nuestras redes 😁👇🏼\n\nParticipantes:\n`
+      let result = `En este #UndefinedLive estaremos hablando sobre [insertar descripción del tema]\n\nSi te gustan estos lives no olvides compartir y seguirnos en nuestras redes 😁👇🏼\n\nParticipantes:\n`
 
       participants.forEach(p => {
         const ud = undefinedDevs.find(u => u.id === p.id)
@@ -102,7 +102,7 @@ class Dispatcher {
       const channel = getChannelById(message, this.undefinedBotsChannelId)
       const member = getGuildMemberByMessage(message)
 
-      channel.send(`${member} Lista de comandos\n${result}`)
+      channel.send(`${member}Descripción:\n${result}`)
 
     } catch (error) {
       logger('description command', error)
@@ -115,6 +115,16 @@ class Dispatcher {
       channel.send(`Buenos días, buenas tardes, buenas noches, recuerden que los queremos mucho`, { files: ['https://i.imgur.com/QrBXmAC.jpg'] })
     } catch (error) {
       logger('love command', error)
+    }
+  }
+
+  getToWorkFran(message) {
+    try {
+      const channel = getChannelById(message, this.undefinedBotsChannelId)
+      const franId = undefinedDevs.find(ud => ud.name === 'Frandeveloper').id
+      channel.send(`Ya ponte a jalar <@${franId}>`)
+    } catch (error) {
+      logger('fran command', error)
     }
   }
 

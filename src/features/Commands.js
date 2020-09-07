@@ -18,6 +18,11 @@ const commands = [
     id: '!love',
     exec: (dispatcher, message) => dispatcher.love(message),
     description: 'Les dice a todos que los queremos'
+  },
+  {
+    id: '!fj',
+    exec: (dispatcher, message) => dispatcher.getToWorkFran(message),
+    description: 'Le dice a Fran que se ponga a jalar'
   }
 ]
 
