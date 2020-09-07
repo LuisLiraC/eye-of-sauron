@@ -2,7 +2,6 @@ const commands = require('./Commands')
 const undefinedDevs = require('../lib/UndefinedDevs')
 const channels = require('../lib/Channels')
 const emojis = require('../lib/Emojis')
-const messages = require('../lib/Messages')
 
 const logger = require('../utils/Logger')
 const {
@@ -13,8 +12,10 @@ const {
 } = require('../utils/Discord')
 
 class Dispatcher {
-  constructor(client) {
+  constructor(client, db, validator) {
     this.client = client
+    this.db = db
+    this.validator = validator
   }
 
   welcome(member) {
@@ -40,9 +41,8 @@ class Dispatcher {
 
   removeUnverified(reaction, user) {
     try {
-      const messageId = reaction.message.id
       const member = reaction.message.guild.member(user)
-      if (member && messageId === messages.rulesMessage) {
+      if (member) {
         let role = member.guild.roles.cache.find(r => r.name === 'unverified')
         member.roles.remove(role)
         const channel = getChannelById(reaction.message, channels.undefinedDevsBots)
@@ -135,6 +135,72 @@ class Dispatcher {
     }
   }
 
+  raffle(message) {
+    try {
+      const [messageToReactId] = message.content.match(/[0-9]{18,}/)
+
+      const exists = this.db.get('raffles')
+        .find({ 'message_id': messageToReactId })
+        .value()
+
+      if (!exists) {
+        this.db.get('raffles')
+          .push({
+            'message_id': messageToReactId,
+            'reactions': []
+          })
+          .write()
+      }
+    } catch (error) {
+      logger('raffle command', error)
+    }
+  }
+
+  addParticipant(messageId, user) {
+    try {
+
+      const registeredUsers = this.db.get('raffles')
+        .find({ 'message_id':  messageId })
+        .get('reactions')
+        .value()
+
+      if (registeredUsers.includes(user.id)) return
+
+      this.db.get('raffles')
+        .find({ 'message_id':  messageId })
+        .get('reactions')
+        .push(user.id)
+        .write()
+    } catch (error) {
+      logger('add participant', error)
+    }
+    
+  }
+
+  announceWinner(message) {
+    try {
+      const [messageId] = message.content.match(/[0-9]{18,}/)
+      const isRaffle = this.validator.isRaffle(messageId)
+
+      if (isRaffle) {
+        const users = this.db.get('raffles')
+          .find({ 'message_id': messageId })
+          .get('reactions')
+          .value()
+
+        const randomNum = Math.floor(Math.random() * users.length)
+        const winner = users[randomNum]
+
+        message.reply(`Felicidades <@${winner}> ganaste la rifa del día hoy :D`)
+      } else {
+        const channel = getChannelById(message, channels.undefinedDevsBots)
+        const member = getGuildMemberByMessage(message)
+        channel.send(`${member} El ID del comentario no se encontró`)
+      }
+    } catch (error) {
+      logger('announcer winner', error)
+    }
+  }
 }
 
 module.exports = Dispatcher

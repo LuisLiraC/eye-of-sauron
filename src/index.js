@@ -1,12 +1,23 @@
 const Discord = require('discord.js')
-const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] })
-const config = require('./config')
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+
 const Dispatcher = require('./features/Dispatcher')
 const Validator = require('./utils/Validator')
+const config = require('./config')
 const commands = require('./features/Commands')
+const messages = require('./lib/Messages')
+const { find } = require('./lib/UndefinedDevs')
+
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] })
+const adapter = new FileSync('./src/lib/db.json')
+const db = low(adapter)
+
+db.defaults({})
 
 client.login(config.token)
-const dispatcher = new Dispatcher(client)
+const validator = new Validator(db)
+const dispatcher = new Dispatcher(client, db, validator)
 
 client.on('guildMemberAdd', member => {
   dispatcher.welcome(member)
@@ -17,7 +28,6 @@ client.on('message', message => {
   if (!message.guild) return
   if (message.author.bot) return
 
-  const validator = new Validator()
   const id = message.author.id
 
   if (validator.isUndefinedDev(id) && message.content.startsWith('!')) {
@@ -33,5 +43,15 @@ client.on('message', message => {
 })
 
 client.on('messageReactionAdd', (reaction, user) => {
-  dispatcher.removeUnverified(reaction, user)
+  const messageId = reaction.message.id
+
+  if (messageId === messages.rulesMessage) {
+    dispatcher.removeUnverified(reaction, user)
+  }
+  
+  const isRaffle = validator.isRaffle(messageId)
+
+  if (isRaffle) {
+    dispatcher.addParticipant(messageId, user)
+  }
 })

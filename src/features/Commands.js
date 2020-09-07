@@ -23,6 +23,16 @@ const commands = [
     id: '!fj',
     exec: (dispatcher, message) => dispatcher.getToWorkFran(message),
     description: 'Le dice a Fran que se ponga a jalar'
+  },
+  {
+    id: '!raffle',
+    exec: (dispatcher, message) => dispatcher.raffle(message),
+    description: 'Recibe el ID de un mensaje y lo registra para recibir reacciones para hacer rifas'
+  },
+  {
+    id: '!winner',
+    exec: (dispatcher, message) => dispatcher.announceWinner(message),
+    description: 'Recibe el ID de un mensaje registrado con !raffle para elegir un ganador de forma aleatoria'
   }
 ]
 
