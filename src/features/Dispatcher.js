@@ -6,6 +6,25 @@ class Dispatcher {
     this.client = client
   }
 
+  welcome(member) {
+    try {
+      const channel = member.guild.channels.cache.find(ch => ch.name === '🖖-welcome')
+      if (!channel) return
+      const emoji = this.client.emojis.cache.get('724816411733786808')
+      channel.send(`¡Hola ${member}! Bienvenvid@ a la comunidad de Undefined Devs ${emoji}`)
+    } catch (error) {
+      console.log(`[error] [welcome command] ${error}`)
+    }
+  }
+
+  hijole(message) {
+    try {
+      message.reply('', { files: ['https://i.pinimg.com/564x/e8/17/80/e8178017c48860752523cc080af84d57.jpg'] })
+    } catch (error) {
+      console.log(`[error] [hijole command] ${error}`)
+    }
+  }
+
   rules(message) {
     try {
       const user = message.mentions.users.first()
