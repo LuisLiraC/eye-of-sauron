@@ -27,12 +27,12 @@ const commands = [
   {
     id: '!raffle',
     exec: (dispatcher, message) => dispatcher.raffle(message),
-    description: 'Recibe el ID de un mensaje y lo registra para recibir reacciones para hacer rifas\n        Ejemplo: !raffle 724861047768350831        \nNota: Solo se registrarán las reacciones hechas después de usar este comando'
+    description: 'Recibe el ID de un mensaje y lo registra para recibir reacciones para hacer rifas\n        Ejemplo: !raffle 724861047768350831        \n        Nota: Solo se registrarán las reacciones hechas después de usar este comando'
   },
   {
     id: '!winner',
     exec: (dispatcher, message) => dispatcher.announceWinner(message),
-    description: 'Recibe el ID de un mensaje registrado con !raffle para elegir un ganador de forma aleatoria\n        Ejemplo: !winner 724861047768350831        \nNota: El bot responde en el canal que fue invocado y mencionan al ganador'
+    description: 'Recibe el ID de un mensaje registrado con !raffle para elegir un ganador de forma aleatoria\n        Ejemplo: !winner 724861047768350831        \n        Nota: El bot responde en el canal que fue invocado y mencionan al ganador'
   }
 ]
 
