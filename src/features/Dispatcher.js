@@ -79,13 +79,13 @@ class Dispatcher {
 
   help(message) {
     try {
-      let result = ''
-      commands.forEach(c => {
-        result += `${c.id} --> ${c.description}\n`
-      })
+      const result = commands.map(c => (
+        `${c.id} --> ${c.description}\n`
+      )).join('')
+
       const channel = getChannelById(message, channels.undefinedDevsBots)
       const member = getGuildMemberByMessage(message)
-      channel.send(`${member} Lista de comandos\n${result}`)
+      channel.send(`${member} Lista de comandos:\n${result}`)
     } catch (error) {
       logger('help command', error)
     }
@@ -96,6 +96,7 @@ class Dispatcher {
       const participants = message.mentions.users.array()
       let result = `En este #UndefinedLive estaremos hablando sobre [insertar descripción del tema]\n\nSi te gustan estos lives no olvides compartir y seguirnos en nuestras redes 😁👇🏼\n\nParticipantes:\n`
 
+      
       participants.forEach(p => {
         const ud = undefinedDevs.find(u => u.id === p.id)
         if (ud) {
@@ -104,12 +105,9 @@ class Dispatcher {
       })
 
       result += `\nDiscord: <https://discord.gg/UKPbV3j>\n\nLive anterior: [insertar link del live]`
-
       const channel = getChannelById(message, channels.undefinedDevsBots)
       const member = getGuildMemberByMessage(message)
-
-      channel.send(`${member}Descripción:\n${result}`)
-
+      channel.send(`${member} Descripción:\n${result}`)
     } catch (error) {
       logger('description command', error)
     }
