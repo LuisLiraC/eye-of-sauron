@@ -2,7 +2,7 @@ const commands = [
   {
     id: '!rules',
     exec: (dispatcher, message) => dispatcher.rules(message),
-    description: 'Avisa al usuario mencionado sobre su comportamiento'
+    description: 'Avisa al usuario mencionado sobre su comportamiento\n    Ejemplo: !rules @FranyerRangel (Frandeveloper)👨💻'
   },
   {
     id: '!help',
@@ -12,7 +12,7 @@ const commands = [
   {
     id: '!desc',
     exec: (dispatcher, message) => dispatcher.description(message),
-    description: 'Devuelve la descripción para el live'
+    description: 'Devuelve la descripción para el live con los integrantes mencionados\n    Ejemplo: !desc @musarte @Wiar8 @vurokrazia'
   },
   {
     id: '!love',
