@@ -1,20 +1,26 @@
 const commands = require('./Commands')
 const undefinedDevs = require('../lib/UndefinedDevs')
+const channels = require('../lib/Channels')
+const emojis = require('../lib/Emojis')
+
 const logger = require('../utils/Logger')
-const { getGuildMemberByMessage, getChannelById, getChannelByName } = require('../utils/Discord')
+const {
+  getGuildMemberByMessage,
+  getChannelById,
+  getChannelByName,
+  getEmojiById
+} = require('../utils/Discord')
 
 class Dispatcher {
   constructor(client) {
     this.client = client
-    this.undefinedBotsChannelId = '752574250610851860'
-    this.generalBotsChannelId = '752566045461577739'
   }
 
   welcome(member) {
     try {
       const channel = getChannelByName(member, '🖖-welcome')
       if (!channel) return
-      const emoji = this.client.emojis.cache.get('724816411733786808')
+      const emoji = getEmojiById(this.client, emojis.linkPepe)
       const rulesChannel = getChannelByName(member, '🦧-reglas').toString()
       channel.send(`¡Hola ${member}! Bienvenvid@ a la comunidad de Undefined Devs ${emoji}\nLee nuestro canal de ${rulesChannel} para comenzar a participar en la comunidad.`)
     } catch (error) {
@@ -46,7 +52,7 @@ class Dispatcher {
 
   hijole(message) {
     try {
-      const channel = getChannelById(message, this.generalBotsChannelId)
+      const channel = getChannelById(message, channels.generalBots)
       const member = getGuildMemberByMessage(message)
       channel.send(`${member}`, { files: ['https://i.pinimg.com/564x/e8/17/80/e8178017c48860752523cc080af84d57.jpg'] })
     } catch (error) {
@@ -61,8 +67,8 @@ class Dispatcher {
         const member = message.guild.member(user)
         if (member) {
           const channel = getChannelByName(member, '☝🏼-moderación')
-          const emoji = this.client.emojis.cache.get('752160268913475605')
-          const rulesChannel = message.guild.channels.cache.get('724806034769575988').toString()
+          const emoji = getEmojiById(this.client, emojis.pepeRules)
+          const rulesChannel = getChannelById(message, channels.rulesChannel).toString()
           channel.send(`${emoji} ${member} tu comportamiento no está siendo el adecuado, te recomendamos leer las reglas de nuevo ${rulesChannel}`)
         }
       }
@@ -77,7 +83,7 @@ class Dispatcher {
       commands.forEach(c => {
         result += `${c.id} --> ${c.description}\n`
       })
-      const channel = getChannelById(message, this.undefinedBotsChannelId)
+      const channel = getChannelById(message, channels.undefinedDevsBots)
       const member = getGuildMemberByMessage(message)
       channel.send(`${member} Lista de comandos\n${result}`)
     } catch (error) {
@@ -99,7 +105,7 @@ class Dispatcher {
 
       result += `\nDiscord: <https://discord.gg/UKPbV3j>\n\nLive anterior: [insertar link del live]`
 
-      const channel = getChannelById(message, this.undefinedBotsChannelId)
+      const channel = getChannelById(message, channels.undefinedDevsBots)
       const member = getGuildMemberByMessage(message)
 
       channel.send(`${member}Descripción:\n${result}`)
@@ -111,7 +117,7 @@ class Dispatcher {
 
   love(message) {
     try {
-      const channel = getChannelById(message, this.generalBotsChannelId)
+      const channel = getChannelById(message, channels.generalBots)
       channel.send(`Buenos días, buenas tardes, buenas noches, recuerden que los queremos mucho`, { files: ['https://i.imgur.com/QrBXmAC.jpg'] })
     } catch (error) {
       logger('love command', error)
@@ -120,7 +126,7 @@ class Dispatcher {
 
   getToWorkFran(message) {
     try {
-      const channel = getChannelById(message, this.undefinedBotsChannelId)
+      const channel = getChannelById(message, channels.undefinedDevsBots)
       const franId = undefinedDevs.find(ud => ud.name === 'Frandeveloper').id
       channel.send(`Ya ponte a jalar <@${franId}>`)
     } catch (error) {

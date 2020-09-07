@@ -14,9 +14,15 @@ function getChannelByName(member, channelName) {
   return channel
 }
 
+function getEmojiById(client, emojiId) {
+  const emoji = client.emojis.cache.get(emojiId)
+  return emoji
+}
+
 
 module.exports = {
   getGuildMemberByMessage,
   getChannelById,
-  getChannelByName
+  getChannelByName,
+  getEmojiById
 }

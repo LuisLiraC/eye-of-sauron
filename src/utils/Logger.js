@@ -1,4 +1,4 @@
-function logger (method, error) {
+function logger(method, error) {
   console.log(`[error] [${method}] ${error}`)
 }
 

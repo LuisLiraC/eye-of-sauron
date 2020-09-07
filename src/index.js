@@ -16,10 +16,10 @@ client.on('guildMemberAdd', member => {
 client.on('message', message => {
   if (!message.guild) return
   if (message.author.bot) return
-  
+
   const validator = new Validator()
   const id = message.author.id
-  
+
   if (validator.isUndefinedDev(id) && message.content.startsWith('!')) {
     const messageStart = message.content.replace(/(![a-zA-Z]{0,9}) .*/, '$1')
     const command = commands.find(c => c.id === messageStart)
