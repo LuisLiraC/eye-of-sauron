@@ -2,6 +2,7 @@ const commands = require('./Commands')
 const undefinedDevs = require('../lib/UndefinedDevs')
 const channels = require('../lib/Channels')
 const emojis = require('../lib/Emojis')
+const messages = require('../lib/Messages')
 
 const logger = require('../utils/Logger')
 const {
@@ -39,11 +40,13 @@ class Dispatcher {
 
   removeUnverified(reaction, user) {
     try {
+      const messageId = reaction.message.id
       const member = reaction.message.guild.member(user)
-      if (member) {
-        console.log('remove unverified')
+      if (member && messageId === messages.rulesMessage) {
         let role = member.guild.roles.cache.find(r => r.name === 'unverified')
         member.roles.remove(role)
+        const channel = getChannelById(reaction.message, channels.undefinedDevsBots)
+        channel.send(`${member} ha reaccionado a las reglas`)
       }
     } catch (error) {
       logger('remove unverified method', error)
