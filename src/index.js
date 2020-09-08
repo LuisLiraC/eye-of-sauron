@@ -29,20 +29,16 @@ client.on('message', message => {
   if (message.author.bot) return
 
   const id = message.author.id
+  const messageCommand = message.content.replace(/(![a-zA-Z]{0,9}) .*/, '$1')
+  const command = commands.find(c => c.id === messageCommand)
 
   if (validator.isUndefinedDev(id) && message.content.startsWith('!')) {
-    const messageStart = message.content.replace(/(![a-zA-Z]{0,9}) .*/, '$1')
-    const command = commands.find(c => c.id === messageStart)
-
     command
       ? command.exec(dispatcher, message)
       : message.reply('el comando no existe, usa `!help` para mostrar la lista de comandos')
   } else if (!validator.isUndefinedDev(id) && message.content.startsWith('!')) {
-    const command = commands.find(c => c.id === messageStart)
-
-    command
-      ? dispatcher.hijole(message)
-      : dispatcher.onlyAdmin(message)
+    const command = commands.find(c => c.id === messageCommand)
+    command && dispatcher.hijole(message)
   }
 })
 

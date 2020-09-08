@@ -63,17 +63,6 @@ class Dispatcher {
     }
   }
 
-  onlyAdmin() {
-    try {
-      const channel = getChannelById(message, channels.generalBots)
-      const member = getGuildMemberByMessage(message)
-      const emoji = getEmojiById(this.client, emojis.xmaxCheems)
-      channel.send(`${member} mis comando son para los admins ${emoji}`)
-    } catch (error) {
-      logger('onlye admin method', error)
-    }
-  }
-
   rules(message) {
     try {
       const user = message.mentions.users.first()
@@ -201,8 +190,9 @@ class Dispatcher {
 
         const randomNum = Math.floor(Math.random() * users.length)
         const winner = users[randomNum]
+        const emoji = getEmojiById(this.client, emojis.xmaxCheems)
 
-        message.reply(`Felicidades <@${winner}> ganaste la rifa del día hoy :D`)
+        message.reply(`Felicidades <@${winner}> ganaste la rifa del día hoy ${emoji}`)
       } else {
         channelLogger(message, channel.undefinedDevsBots)
         // const channel = getChannelById(message, channels.undefinedDevsBots)

@@ -1,7 +1,7 @@
 const emojis = {
   linkPepe: '724816411733786808',
   pepeRules: '752160268913475605',
-  xmaxCheems: '752974183759347822'
+  xmaxCheems: '724816411989639241'
 }
 
 module.exports = emojis
