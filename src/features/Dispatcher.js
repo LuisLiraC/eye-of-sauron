@@ -3,7 +3,7 @@ const undefinedDevs = require('../lib/UndefinedDevs')
 const channels = require('../lib/Channels')
 const emojis = require('../lib/Emojis')
 
-const logger = require('../utils/Logger')
+const { logger, channelLogger } = require('../utils/Logger')
 const {
   getGuildMemberByMessage,
   getChannelById,
@@ -99,7 +99,7 @@ class Dispatcher {
       const participants = message.mentions.users.array()
       let result = `En este #UndefinedLive estaremos hablando sobre [insertar descripción del tema]\n\nSi te gustan estos lives no olvides compartir y seguirnos en nuestras redes 😁👇🏼\n\nParticipantes:\n`
 
-      
+
       participants.forEach(p => {
         const ud = undefinedDevs.find(u => u.id === p.id)
         if (ud) {
@@ -160,21 +160,21 @@ class Dispatcher {
     try {
 
       const registeredUsers = this.db.get('raffles')
-        .find({ 'message_id':  messageId })
+        .find({ 'message_id': messageId })
         .get('reactions')
         .value()
 
       if (registeredUsers.includes(user.id)) return
 
       this.db.get('raffles')
-        .find({ 'message_id':  messageId })
+        .find({ 'message_id': messageId })
         .get('reactions')
         .push(user.id)
         .write()
     } catch (error) {
       logger('add participant', error)
     }
-    
+
   }
 
   announceWinner(message) {
@@ -193,12 +193,35 @@ class Dispatcher {
 
         message.reply(`Felicidades <@${winner}> ganaste la rifa del día hoy :D`)
       } else {
-        const channel = getChannelById(message, channels.undefinedDevsBots)
-        const member = getGuildMemberByMessage(message)
-        channel.send(`${member} El ID del comentario no se encontró`)
+        channelLogger(message, channel.undefinedDevsBots)
+        // const channel = getChannelById(message, channels.undefinedDevsBots)
+        // const member = getGuildMemberByMessage(message)
+        // channel.send(`${member} El ID del comentario no se encontró`)
       }
     } catch (error) {
       logger('announcer winner', error)
+    }
+  }
+
+  viewParticipants(message) {
+    try {
+      const [messageRegistered] = message.content.match(/[0-9]{18,}/g)
+      const isRaffle = this.validator.isRaffle(messageRegistered)
+
+      if (isRaffle) {
+        const users = this.db.get('raffles')
+          .find({ 'message_id': messageRegistered })
+          .get('reactions')
+          .value()
+
+        const result = users.map(id => ` <@${id}> `).join('')
+
+        message.reply(`Particpantes: ${result}`)
+      } else {
+        channelLogger(message, channel.undefinedDevsBots)
+      }
+    } catch (error) {
+      logger('view participants', error)
     }
   }
 }

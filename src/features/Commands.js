@@ -30,6 +30,11 @@ const commands = [
     description: 'Retgistra el mensaje para que las personas puedan reaccioanr y participar en la rifa\n        Ejemplo: !raffle Reaccionen a este mensaje 😁        \n        Nota: Solo se registrarán las reacciones hechas después de usar este comando'
   },
   {
+    id: '!part',
+    exec: (dispatcher, message) => dispatcher.viewParticipants(message),
+    description: 'Recibe un ID de mensaje y muestra las personas que han reaccionado\n        Ejemplo !part 724861047768350831'
+  },
+  {
     id: '!winner',
     exec: (dispatcher, message) => dispatcher.announceWinner(message),
     description: 'Recibe el ID de un mensaje registrado con !raffle para elegir un ganador de forma aleatoria\n        Ejemplo: !winner 724861047768350831        \n        Nota: El bot responde en el canal que fue invocado y mencionan al ganador'
