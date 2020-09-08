@@ -24,7 +24,7 @@ class Dispatcher {
       if (!channel) return
       const emoji = getEmojiById(this.client, emojis.linkPepe)
       const rulesChannel = getChannelByName(member, '🦧-reglas').toString()
-      channel.send(`¡Hola ${member}! Bienvenvid@ a la comunidad de Undefined Devs ${emoji}\nLee nuestro canal de ${rulesChannel} para comenzar a participar en la comunidad.`)
+      channel.send(`¡Hola ${member}! Bienvenvid@ a la comunidad de Undefined Devs ${emoji}\nLee nuestro canal de ${rulesChannel} hasta el final y sigue las instrucciones para poder entrar a todos los canales.`)
     } catch (error) {
       logger('welcome method', error)
     }
