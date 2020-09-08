@@ -27,7 +27,7 @@ const commands = [
   {
     id: '!raffle',
     exec: (dispatcher, message) => dispatcher.raffle(message),
-    description: 'Recibe el ID de un mensaje y lo registra para recibir reacciones para hacer rifas\n        Ejemplo: !raffle 724861047768350831        \n        Nota: Solo se registrarán las reacciones hechas después de usar este comando'
+    description: 'Retgistra el mensaje para que las personas puedan reaccioanr y participar en la rifa\n        Ejemplo: !raffle Reaccionen a este mensaje 😁        \n        Nota: Solo se registrarán las reacciones hechas después de usar este comando'
   },
   {
     id: '!winner',

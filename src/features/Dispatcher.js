@@ -83,12 +83,12 @@ class Dispatcher {
   help(message) {
     try {
       const result = commands.map(c => (
-        `${c.id} --> ${c.description}\n`
+        `▶ ${c.id} --> ${c.description}\n`
       )).join('')
 
       const channel = getChannelById(message, channels.undefinedDevsBots)
       const member = getGuildMemberByMessage(message)
-      channel.send(`${member} Lista de comandos:\n${result}`)
+      channel.send(`${member} \`\`\`Lista de comandos:\n${result}\`\`\``)
     } catch (error) {
       logger('help command', error)
     }
@@ -137,7 +137,7 @@ class Dispatcher {
 
   raffle(message) {
     try {
-      const [messageToReactId] = message.content.match(/[0-9]{18,}/)
+      const messageToReactId = message.id
 
       const exists = this.db.get('raffles')
         .find({ 'message_id': messageToReactId })
