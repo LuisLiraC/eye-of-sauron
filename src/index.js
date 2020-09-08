@@ -38,7 +38,11 @@ client.on('message', message => {
       ? command.exec(dispatcher, message)
       : message.reply('el comando no existe, usa `!help` para mostrar la lista de comandos')
   } else if (!validator.isUndefinedDev(id) && message.content.startsWith('!')) {
-    dispatcher.hijole(message)
+    const command = commands.find(c => c.id === messageStart)
+
+    command
+      ? dispatcher.hijole(message)
+      : dispatcher.onlyAdmin(message)
   }
 })
 

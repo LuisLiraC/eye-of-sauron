@@ -63,6 +63,17 @@ class Dispatcher {
     }
   }
 
+  onlyAdmin() {
+    try {
+      const channel = getChannelById(message, channels.generalBots)
+      const member = getGuildMemberByMessage(message)
+      const emoji = getEmojiById(this.client, emojis.xmaxCheems)
+      channel.send(`${member} mis comando son para los admins ${emoji}`)
+    } catch (error) {
+      logger('onlye admin method', error)
+    }
+  }
+
   rules(message) {
     try {
       const user = message.mentions.users.first()
