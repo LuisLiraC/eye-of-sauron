@@ -2,6 +2,7 @@ const commands = require('./Commands')
 const undefinedDevs = require('../lib/UndefinedDevs')
 const channels = require('../lib/Channels')
 const emojis = require('../lib/Emojis')
+const Validator = require('../utils/Validator')
 
 const { logger, channelLogger } = require('../utils/Logger')
 const {
@@ -11,56 +12,11 @@ const {
   getEmojiById
 } = require('../utils/Discord')
 
-class Dispatcher {
-  constructor(client, db, validator) {
+class AdminBehavior {
+  constructor(client, db) {
     this.client = client
     this.db = db
-    this.validator = validator
-  }
-
-  welcome(member) {
-    try {
-      const channel = getChannelByName(member, '🖖-welcome')
-      if (!channel) return
-      const emoji = getEmojiById(this.client, emojis.linkPepe)
-      const rulesChannel = getChannelByName(member, '🦧-reglas').toString()
-      channel.send(`¡Hola ${member}! Bienvenvid@ a la comunidad de Undefined Devs ${emoji}\nLee nuestro canal de ${rulesChannel} hasta el final y sigue las instrucciones para poder entrar a todos los canales.`)
-    } catch (error) {
-      logger('welcome method', error)
-    }
-  }
-
-  setUnverified(member) {
-    try {
-      let role = member.guild.roles.cache.find(r => r.name === 'unverified')
-      member.roles.add(role)
-    } catch (error) {
-      logger('set unverified method', error)
-    }
-  }
-
-  removeUnverified(reaction, user) {
-    try {
-      const member = reaction.message.guild.member(user)
-      if (member) {
-        let role = member.guild.roles.cache.find(r => r.name === 'unverified')
-        member.roles.remove(role)
-        const channel = getChannelById(reaction.message, channels.undefinedDevsBots)
-        channel.send(`${member} ha reaccionado a las reglas`)
-      }
-    } catch (error) {
-      logger('remove unverified method', error)
-    }
-  }
-
-  hijole(message) {
-    try {
-      const channel = getChannelById(message, channels.generalBots)
-      const member = getGuildMemberByMessage(message)
-      channel.send(`${member}`, { files: ['https://i.pinimg.com/564x/e8/17/80/e8178017c48860752523cc080af84d57.jpg'] })
-    } catch (error) {
-      logger('hijole method', error)
-    }
+    this.validator = new Validator(db)
   }
 
   rules(message) {
@@ -233,4 +189,4 @@ class Dispatcher {
   }
 }
 
-module.exports = Dispatcher
+module.exports = AdminBehavior

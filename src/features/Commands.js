@@ -15,16 +15,6 @@ const commands = [
     description: 'Devuelve la descripción para el live con los integrantes mencionados\n        Ejemplo: !desc @musarte @Wiar8 @vurokrazia'
   },
   {
-    id: '!love',
-    exec: (dispatcher, message) => dispatcher.love(message),
-    description: 'Les dice a todos que los queremos'
-  },
-  {
-    id: '!fj',
-    exec: (dispatcher, message) => dispatcher.getToWorkFran(message),
-    description: 'Le dice a Fran que se ponga a jalar'
-  },
-  {
     id: '!raffle',
     exec: (dispatcher, message) => dispatcher.raffle(message),
     description: 'Retgistra el mensaje para que las personas puedan reaccioanr y participar en la rifa\n        Ejemplo: !raffle Reaccionen a este mensaje 😁        \n        Nota: Solo se registrarán las reacciones hechas después de usar este comando'
@@ -43,7 +33,17 @@ const commands = [
     id: '!meeting',
     exec: (dispatcher, message) => dispatcher.emergency(message),
     description: 'Usar en caso de que sea algo importante para hablar sobre la comunidad'
-  }
+  },
+  {
+    id: '!love',
+    exec: (dispatcher, message) => dispatcher.love(message),
+    description: 'Les dice a todos que los queremos'
+  },
+  {
+    id: '!fj',
+    exec: (dispatcher, message) => dispatcher.getToWorkFran(message),
+    description: 'Le dice a Fran que se ponga a jalar'
+  },
 ]
 
 module.exports = commands
