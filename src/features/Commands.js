@@ -38,6 +38,11 @@ const commands = [
     id: '!winner',
     exec: (dispatcher, message) => dispatcher.announceWinner(message),
     description: 'Recibe el ID de un mensaje registrado con !raffle para elegir un ganador de forma aleatoria\n        Ejemplo: !winner 724861047768350831        \n        Nota: El bot responde en el canal que fue invocado y mencionan al ganador'
+  },
+  {
+    id: '!meeting',
+    exec: (dispatcher, message) => dispatcher.announceWinner(message),
+    description: 'Usar en caso de que sea algo importante para hablar sobre la comunidad'
   }
 ]
 

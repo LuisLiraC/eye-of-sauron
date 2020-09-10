@@ -195,9 +195,6 @@ class Dispatcher {
         message.reply(`Felicidades <@${winner}> ganaste la rifa del día hoy ${emoji}`)
       } else {
         channelLogger(message, channel.undefinedDevsBots)
-        // const channel = getChannelById(message, channels.undefinedDevsBots)
-        // const member = getGuildMemberByMessage(message)
-        // channel.send(`${member} El ID del comentario no se encontró`)
       }
     } catch (error) {
       logger('announcer winner', error)
@@ -223,6 +220,15 @@ class Dispatcher {
       }
     } catch (error) {
       logger('view participants', error)
+    }
+  }
+
+  emergency(message) {
+    try {
+      const channel = getChannelById(message, channels.organization)
+      channel.send('@here', { files: ['https://i.ibb.co/02hWZ3C/emergency.png']})
+    } catch (error) {
+      logger('emergency command', error)
     }
   }
 }
