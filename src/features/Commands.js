@@ -41,7 +41,7 @@ const commands = [
   },
   {
     id: '!meeting',
-    exec: (dispatcher, message) => dispatcher.announceWinner(message),
+    exec: (dispatcher, message) => dispatcher.emergency(message),
     description: 'Usar en caso de que sea algo importante para hablar sobre la comunidad'
   }
 ]
