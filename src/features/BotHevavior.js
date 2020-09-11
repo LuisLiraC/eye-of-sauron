@@ -10,6 +10,9 @@ const {
 } = require('../utils/Discord')
 
 class BotBehavior {
+  constructor(client) {
+    this.client = client
+  }
   welcome(member) {
     try {
       const channel = getChannelByName(member, '🖖-welcome')

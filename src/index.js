@@ -15,7 +15,7 @@ const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 client.login(config.token)
 
 const adminBehavior = new AdminBehavior(client, db)
-const botBehavior = new BotBehavior()
+const botBehavior = new BotBehavior(client)
 
 client.on('guildMemberAdd', member => {
   botBehavior.welcome(member)
@@ -23,19 +23,19 @@ client.on('guildMemberAdd', member => {
 })
 
 client.on('message', message => {
-  if (!message.guild) return
-  if (message.author.bot) return
+  if (!message.guild || message.author.bot) return
 
   const id = message.author.id
   const messageCommand = message.content.replace(/(![a-zA-Z]{0,9}) .*/, '$1')
   const command = commands.find(c => c.id === messageCommand)
+  const isCommand  = message.content.startsWith('!')
+  const isUd = adminBehavior.validator.isUndefinedDev(id)
 
-  if (adminBehavior.validator.isUndefinedDev(id) && message.content.startsWith('!')) {
+  if (isUd && isCommand) {
     command
       ? command.exec(adminBehavior, message)
       : message.reply('el comando no existe, usa `!help` para mostrar la lista de comandos')
-  } else if (!adminBehavior.validator.isUndefinedDev(id) && message.content.startsWith('!')) {
-    const command = commands.find(c => c.id === messageCommand)
+  } else if (!isUd && isCommand) {
     command && botBehavior.hijole(message)
   }
 })
