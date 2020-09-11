@@ -14,8 +14,8 @@ function getChannelByName(member, channelName) {
   return channel
 }
 
-function getEmojiById(member, emojiId) {
-  const emoji = member.client.emojis.cache.get(emojiId)
+function getEmojiById(client, emojiId) {
+  const emoji = client.emojis.cache.get(emojiId)
   return emoji
 }
 
